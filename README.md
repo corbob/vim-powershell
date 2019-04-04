@@ -5,8 +5,6 @@
 
 ```vim
 call plug#begin('~/.vim/plugged')
-Plug 'sheerun/vim-polyglot'
-Plug 'junegunn/vim-easy-align'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
