@@ -35,7 +35,7 @@ function! VsimEnableLanguageServerKeys()
         vnoremap = :call LanguageClient_textDocument_rangeFormatting()<CR>
         nnoremap <C-k><C-r> :call LanguageClient_textDocument_references()<CR>
         nnoremap <C-e><C-d> :call LanguageClient_textDocument_formatting()<CR>
-        autocmd! CursorHold * call PSHover()
+        autocmd! CursorHold * call PS1Hover()
 	call LanguageClient#registerHandlers({'output': 'PS1OutputHandle'})
         vnoremap <silent> <F8> :call RunCode()<CR>
         "autocmd! VimLeave * :LanguageClientStop
