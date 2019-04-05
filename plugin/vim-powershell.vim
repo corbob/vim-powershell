@@ -2,9 +2,13 @@
 "required for operations modifying multiple buffers like rename.
 set hidden
 
+let s:path = expand('<sfile>:p:h') . '/PowerShellEditorServices/'
+
+let startEditorServicesPath = s:path . 'PowerShellEditorServices/Start-EditorServices.ps1'
+
 " a hash of file types to language server launch command
 let g:LanguageClient_serverCommands = {
-    \ 'ps1': ['pwsh', '~/PowerShellEditorServices/PowerShellEditorServices/Start-EditorServices.ps1', '-HostName', 'nvim', '-HostProfileId', '0', '-HostVersion', '1.0.0', '-LogPath', '~/pses.log.txt', '-LogLevel', 'Diagnostic', '-BundledModulesPath', '~/PowerShellEditorServices/', '-Stdio', '-SessionDetailsPath', '~/.pses_session']
+    \ 'ps1': ['pwsh', startEditorServicesPath, '-HostName', 'nvim', '-HostProfileId', '0', '-HostVersion', '1.0.0', '-LogPath', '~/pses.log.txt', '-LogLevel', 'Diagnostic', '-BundledModulesPath', s:path, '-Stdio', '-SessionDetailsPath', '~/.pses_session']
     \ }
 
 " for debugging LanguageClient-neovim
