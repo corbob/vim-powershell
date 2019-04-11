@@ -13,9 +13,9 @@ let g:LanguageClient_serverCommands = {
 
 " for debugging LanguageClient-neovim
 let g:LanguageClient_loggingLevel = 'DEBUG'
-let g:LanguageClient_loggingFile =  expand('~/LanguageClient.log')
+let g:LanguageClient_loggingFile =  expand('<sfile>:p:h') . 'LanguageClient.log'
 
-let g:LanguageClient_serverStderr = expand('~/LanguageServer.log')
+let g:LanguageClient_serverStderr = expand('<sfile>:p:h') . 'LanguageServer.log'
 
 " fun with F8
 function! PS1OutputHandle(output) abort
@@ -29,6 +29,7 @@ endfunction
 
 " If the filetype is powershell set up our keybindings
 autocmd FileType ps1 call VsimEnableLanguageServerKeys()
+
 function! VsimEnableLanguageServerKeys()
         " TODO hover with timer
         nnoremap <silent> <S-K> :call PS1Hover()<CR>
@@ -42,7 +43,7 @@ function! VsimEnableLanguageServerKeys()
         autocmd! CursorHold * call PS1Hover()
 	call LanguageClient#registerHandlers({'output': 'PS1OutputHandle'})
         vnoremap <silent> <F8> :call RunCode()<CR>
-        "autocmd! VimLeave * :LanguageClientStop
+        autocmd! VimLeave * :LanguageClientStop
 
 endfunction
 
