@@ -48,7 +48,7 @@ function! VsimEnableLanguageServerKeys()
 endfunction
 
 " fun with F8
-function RunCode()
+function! RunCode()
         let codeString = s:get_visual_selection()
         :call LanguageClient#Call("evaluate", { 'expression': s:get_visual_selection() }, function("PS1OutputHandle"))
 endfunction
