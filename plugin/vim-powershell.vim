@@ -8,7 +8,7 @@ let startEditorServicesPath = s:path . 'PowerShellEditorServices/Start-EditorSer
 
 " a hash of file types to language server launch command
 let g:LanguageClient_serverCommands = {
-    \ 'ps1': ['pwsh', startEditorServicesPath, '-HostName', 'nvim', '-HostProfileId', '0', '-HostVersion', '1.0.0', '-LogPath', '~/pses.log.txt', '-LogLevel', 'Diagnostic', '-BundledModulesPath', s:path, '-Stdio', '-SessionDetailsPath', '~/.pses_session']
+    \ 'ps1': ['pwsh', startEditorServicesPath, '-HostName', 'nvim', '-HostProfileId', '0', '-HostVersion', '1.0.0', '-LogPath', s:path . 'pses.log', '-LogLevel', 'Diagnostic', '-BundledModulesPath', s:path, '-Stdio', '-SessionDetailsPath', s:path . '.pses_session']
     \ }
 
 " for debugging LanguageClient-neovim
@@ -19,6 +19,7 @@ let g:LanguageClient_serverStderr = expand('<sfile>:p:h') . 'LanguageServer.log'
 
 " fun with F8
 function! PS1OutputHandle(output) abort
+	let g:output = a:output
         echomsg json_encode(a:output)
 endfunction
 
@@ -50,7 +51,7 @@ endfunction
 " fun with F8
 function! RunCode()
         let codeString = s:get_visual_selection()
-        :call LanguageClient#Call("evaluate", { 'expression': s:get_visual_selection() }, function("PS1OutputHandle"))
+        :call LanguageClient#Call('evaluate', { 'expression': codeString }, function('PS1OutputHandle'))
 endfunction
 
 " fun with F8
