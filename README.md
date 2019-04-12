@@ -4,25 +4,34 @@
 
 1. vim/neovim
 1. [vim-plug](https://github.com/junegunn/vim-plug)
+1. [pwsh](https://github.com/powershell/powershell)
 1. git
 
 ## installation
 
-1. `build.ps1`
 1. Put this in your Init.vim:
 
 ```vim
 call plug#begin('~/.vim/plugged')
+
+" LanguageClient used for interfacing with PowerShellEditorServices
 " Use 'powershell -executionpolicy bypass -File install.ps1' in place of the 'bash install.sh' if on Windows.
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Required for intellisense style completions.
+Plug 'roxma/nvim-completion-manager'
 
-" Put your path
-Plug 'path/to/vim-powershell'
+" Required to switch to PowerShell???
+Plug 'sheerun/vim-polyglot'
+
+" vim-powershell Plugin (this is us HYPE)
+Plug 'corbob/vim-powershell', {
+    \ 'do': 'pwsh build.ps1',
+    \ }
+
 call plug#end()
 ```
-3. Run the vim command: `:PlugInstall`
+3. Reload vim (alternately: reload init.vim).
+1. Run the vim command: `:PlugInstall`
