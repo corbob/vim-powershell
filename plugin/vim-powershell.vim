@@ -2,9 +2,18 @@
 "required for operations modifying multiple buffers like rename.
 set hidden
 
+" Set the file type to ps1 for ps1, psm1, and psd1
+" 'ps1' is what vim-polyglot uses for styling
+autocmd BufNewFile,BufRead *.ps*1 set filetype=ps1
+
+" If no other language servers are registered, create an empty dictionary
+if !exists("g:LanguageClient_serverCommands")
+    g:LanguageClient_serverCommands = {}
+endif
+
 " Build startup command.
 let s:bundledModulesPath = expand('<sfile>:p:h') . '/PowerShellEditorServices/'
-let startup = ['pwsh', s:bundledModulesPath . 'PowerShellEditorServices/Start-EditorServices.ps1',
+let g:LanguageClient_serverCommands['ps1'] = ['pwsh', s:bundledModulesPath . 'PowerShellEditorServices/Start-EditorServices.ps1',
         \ '-HostName', 'nvim',
         \ '-HostProfileId', '0',
         \ '-HostVersion', '1.0.0',
@@ -13,15 +22,6 @@ let startup = ['pwsh', s:bundledModulesPath . 'PowerShellEditorServices/Start-Ed
         \ '-BundledModulesPath', s:bundledModulesPath,
         \ '-Stdio',
         \ '-SessionDetailsPath', s:bundledModulesPath . '.pses_session']
-
-" Set the language client to start when using ps1, psd1, psm1
-if !exists("g:LanguageClient_serverCommands")
-    g:LanguageClient_serverCommands = {}
-endif
-
-let g:LanguageClient_serverCommands['ps1'] = startup
-let g:LanguageClient_serverCommands['psd1'] = startup
-let g:LanguageClient_serverCommands['psm1'] = startup
 
 " for debugging LanguageClient-neovim
 let g:LanguageClient_loggingLevel = 'DEBUG'
@@ -41,8 +41,6 @@ endfunction
 
 " If the filetype is powershell set up our keybindings
 autocmd FileType ps1 call VsimEnableLanguageServerKeys()
-autocmd FileType psm1 call VsimEnableLanguageServerKeys()
-autocmd FileType psd1 call VsimEnableLanguageServerKeys()
 function! VsimEnableLanguageServerKeys()
         " TODO hover with timer
         nnoremap <silent> <S-K> :call PS1Hover()<CR>

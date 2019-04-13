@@ -6,12 +6,15 @@
 1. [vim-plug](https://github.com/junegunn/vim-plug)
 1. [pwsh](https://github.com/powershell/powershell)
 1. git
+1. `:echo has("python3")` prints `1`. This is usually set by `python3 -m pip install pynvim` in shell and `let g:python3_host_prog=/path/to/python/executable/` in vimrc/Init.vim.
 
 ## installation
 
-1. Put this in your Init.vim:
+1. Put this in your vimrc/Init.vim:
 
 ```vim
+" Specify a directory for plugins
+" - For Neovim: ~/.local/share/nvim/plugged
 call plug#begin('~/.vim/plugged')
 
 " LanguageClient used for interfacing with PowerShellEditorServices
@@ -31,9 +34,6 @@ autocmd BufEnter * call ncm2#enable_for_buffer()
 " IMPORTANT: :help Ncm2PopupOpen for more information
 set completeopt=noinsert,menuone,noselect
 
-" Required to switch to PowerShell???
-Plug 'sheerun/vim-polyglot'
-
 " vim-powershell Plugin (this is us HYPE)
 Plug 'corbob/vim-powershell', {
     \ 'do': 'pwsh build.ps1',
@@ -41,5 +41,7 @@ Plug 'corbob/vim-powershell', {
 
 call plug#end()
 ```
-3. Reload vim (alternately: reload init.vim).
+
+2. Reload vim (alternately: reload init.vim).
 1. Run the vim command: `:PlugInstall`
+1. (Optional) install [vim-polyglot](https://github.com/sheerun/vim-polyglot) for syntax highlighting 🎨
