@@ -2,19 +2,30 @@
 "required for operations modifying multiple buffers like rename.
 set hidden
 
-let s:path = expand('<sfile>:p:h') . '/PowerShellEditorServices/'
+" Build startup command.
+let s:bundledModulesPath = expand('<sfile>:p:h') . '/PowerShellEditorServices/'
+let startup = ['pwsh', s:bundledModulesPath . 'PowerShellEditorServices/Start-EditorServices.ps1',
+        \ '-HostName', 'nvim',
+        \ '-HostProfileId', '0',
+        \ '-HostVersion', '1.0.0',
+        \ '-LogPath', s:bundledModulesPath . 'pses.log',
+        \ '-LogLevel', 'Diagnostic',
+        \ '-BundledModulesPath', s:bundledModulesPath,
+        \ '-Stdio',
+        \ '-SessionDetailsPath', s:bundledModulesPath . '.pses_session']
 
-let startEditorServicesPath = s:path . 'PowerShellEditorServices/Start-EditorServices.ps1'
+" Set the language client to start when using ps1, psd1, psm1
+if !exists("g:LanguageClient_serverCommands")
+    g:LanguageClient_serverCommands = {}
+endif
 
-" a hash of file types to language server launch command
-let g:LanguageClient_serverCommands = {
-    \ 'ps1': ['pwsh', startEditorServicesPath, '-HostName', 'nvim', '-HostProfileId', '0', '-HostVersion', '1.0.0', '-LogPath', s:path . 'pses.log', '-LogLevel', 'Diagnostic', '-BundledModulesPath', s:path, '-Stdio', '-SessionDetailsPath', s:path . '.pses_session']
-    \ }
+let g:LanguageClient_serverCommands['ps1'] = startup
+let g:LanguageClient_serverCommands['psd1'] = startup
+let g:LanguageClient_serverCommands['psm1'] = startup
 
 " for debugging LanguageClient-neovim
 let g:LanguageClient_loggingLevel = 'DEBUG'
 let g:LanguageClient_loggingFile =  expand('<sfile>:p:h') . 'LanguageClient.log'
-
 let g:LanguageClient_serverStderr = expand('<sfile>:p:h') . 'LanguageServer.log'
 
 " fun with F8
@@ -30,7 +41,8 @@ endfunction
 
 " If the filetype is powershell set up our keybindings
 autocmd FileType ps1 call VsimEnableLanguageServerKeys()
-
+autocmd FileType psm1 call VsimEnableLanguageServerKeys()
+autocmd FileType psd1 call VsimEnableLanguageServerKeys()
 function! VsimEnableLanguageServerKeys()
         " TODO hover with timer
         nnoremap <silent> <S-K> :call PS1Hover()<CR>

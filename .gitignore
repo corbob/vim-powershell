@@ -27,4 +27,8 @@ tags
 # Persistent undo
 [._]*.un~
 
+# Logs
+*.log
+
+# Don't want to commit the PSES build
 PowerShellEditorServices
