@@ -16,29 +16,29 @@
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 call plug#begin('~/.vim/plugged')
+    " OS specific setup
+    let languageClientInstallCommand = 'bash install.sh'
+    if has('win32')
+        languageClientInstallCommand = 'powershell -executionpolicy bypass -File install.ps1'
+    endif
 
-" LanguageClient used for interfacing with PowerShellEditorServices
-" Use 'powershell -executionpolicy bypass -File install.ps1' in place of the 'bash install.sh' if on Windows.
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+    " the language client used in vim-powershell
+    Plug 'autozimu/LanguageClient-neovim', {
+      \ 'branch': 'next',
+      \ 'do': languageClientInstallCommand,
+      \ }
 
-" Required for intellisense style completions.
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
+    " the PowerShell vim extension
+    Plug 'corbob/vim-powershell', {
+      \ 'branch': 'dev',
+      \ 'do': 'pwsh build.ps1',
+      \ }
 
-" enable ncm2 for all buffers
-autocmd BufEnter * call ncm2#enable_for_buffer()
-
-" IMPORTANT: :help Ncm2PopupOpen for more information
-set completeopt=noinsert,menuone,noselect
-
-" vim-powershell Plugin (this is us HYPE)
-Plug 'corbob/vim-powershell', {
-    \ 'do': 'pwsh build.ps1',
-    \ }
-
+    " ncm2 setup for completions
+    Plug 'ncm2/ncm2'
+    Plug 'roxma/nvim-yarp'
+    autocmd BufEnter * call ncm2#enable_for_buffer()
+    set completeopt=noinsert,menuone,noselect
 call plug#end()
 ```
 
